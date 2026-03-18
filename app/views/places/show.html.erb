@@ -1,16 +1,33 @@
-<h1><%= @place["name"] %></h1>
+<h1><%= @place.name %></h1>
 
-<h2>My Entries</h2>
-<% for entry in @entries %>
-  <h3><%= entry["title"] %></h3>
-  <h4><%= entry["occurred_on"] %></h4>
-  <p><%= entry["description"] %></p>
+<% if @current_user %>
+  <h2>My Entries</h2>
+  <div class="row">
+    <% @entries.each do |entry| %>
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= entry.title %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= entry.occurred_on %></h6>
+            <% if entry.image.attached? %>
+              <div class="mb-2">
+                <%= image_tag entry.image, class: "img-fluid" %>
+              </div>
+            <% end %>
+            <p class="card-text"><%= entry.description %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <p>
+    <%= link_to "New Entry", "/entries/new?place_id=#{@place.id}", class: "btn btn-primary" %>
+  </p>
+<% else %>
+  <p>Please log in to view your entries.</p>
 <% end %>
 
 <p>
-  <a href="/entries/new?place_id=<%= @place["id"] %>">New Entry</a>
-</p>
-
-<p>
-  <a href="/places">Back to All Places</a>
+  <%= link_to "Back to All Places", "/places", class: "btn btn-secondary" %>
 </p>

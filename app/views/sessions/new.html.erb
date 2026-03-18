@@ -1,6 +1,13 @@
 <h1>Login</h1>
 
-<form action="/sessions" method="post">
-
-  <button>Login<button>
-</form>
+<%= form_with url: "/sessions", method: :post do |form| %>
+  <div class="mb-3">
+    <%= form.label :email, "Email", class: "form-label" %>
+    <%= form.email_field :email, class: "form-control", required: true %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :password, "Password", class: "form-label" %>
+    <%= form.password_field :password, class: "form-control", required: true %>
+  </div>
+  <%= form.submit "Login", class: "btn btn-primary" %>
+<% end %>

@@ -1,22 +1,38 @@
 <h1>New Entry</h1>
 
-<form action="/entries" method="post">
-  <input type="hidden" name="place_id" value="<%= params["place_id"] %>">
+<% if @entry && @entry.errors.any? %>
+  <div class="alert alert-danger">
+    <h4>Please fix the following errors:</h4>
+    <ul>
+      <% @entry.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 
-  <p>
-    <label for="title_input">Title</label>
-    <input type="text" name="title" id="title_input">
-  </p>
+<%= form_with model: @entry, url: "/entries", method: :post, multipart: true do |form| %>
+  <%= form.hidden_field :place_id, value: params["place_id"] %>
 
-  <p>
-    <label for="description_input">Description</label>
-    <input type="text" name="description" id="description_input">
-  </p>
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-control", required: true %>
+  </div>
 
-  <p>
-    <label for="occurred_on_input">Occurred On</label>
-    <input type="date" name="occurred_on" id="occurred_on_input">
-  </p>
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-control", rows: 5 %>
+  </div>
 
-  <button>Save</button>
-</form>
+  <div class="mb-3">
+    <%= form.label :occurred_on, class: "form-label" %>
+    <%= form.date_field :occurred_on, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :image, "Image (optional)", class: "form-label" %>
+    <%= form.file_field :image, class: "form-control", accept: "image/*" %>
+  </div>
+
+  <%= form.submit "Save", class: "btn btn-primary" %>
+<% end %>
